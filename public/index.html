@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chá de Panela</title>  
+  <link rel="png" type="image/png" href="/images/gingerbread-house.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos Globais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                  url('fundo-site.jpeg') center/contain;
+      min-height: 100vh;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      background-position: center;
+      min-height: 100vh; /* Altura mínima igual à tela do dispositivo */
+      width: 100%; /* Largura total */
+    }
+
+
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      margin-bottom: 70px; /* Espaço para o rodapé fixo */
+    }
+
+    .titulo-principal {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .destaque-verso {
+      font-size: 1.2rem;
+      margin: 25px 0;
+      line-height: 1.6;
+      color: #f8d7af;
+    }
+
+    .texto-convite {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 25px auto;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .destaque-data {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      margin: 30px 0;
+      color: #d4af37;
+    }
+
+    .acoes-cha {
+      margin: 30px auto 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+    }
+
+    .botao-acao {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      background: #d4af37;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .botao-acao:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Modais */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      position: relative;
+      background: rgba(255,255,255,0.1);
+      padding: 40px 20px 20px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Melhorias no Scroll */
+    #modalPresentes .modal-content {
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 60px !important;
+    }
+
+    #listaPresentes {
+      overflow-y: auto;
+      flex: 1;
+      margin: 10px 0;
+      padding-right: 10px;
+    }
+
+    #listaPresentes::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #listaPresentes::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+    }
+
+    #listaPresentes::-webkit-scrollbar-thumb {
+      background: #d4af37;
+      border-radius: 4px;
+    }
+
+    .categoria-items {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    #modalPresentes h2 {
+      position: sticky;
+      top: 0;
+      background: rgba(0,0,0,0.8);
+      padding: 15px 0;
+      z-index: 1;
+      margin: 0;
+    }
+
+    /* Botão Voltar Estilizado */
+    .botao-voltar {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #d4af37;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .botao-voltar:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(-3px);
+    }
+
+    .botao-voltar::before {
+      content: '';
+      display: block;
+      width: 12px;
+      height: 12px;
+      border-left: 2px solid #d4af37;
+      border-bottom: 2px solid #d4af37;
+      transform: rotate(45deg);
+      margin-right: 3px;
+    }
+
+    /* Categorias Expansíveis */
+    .categoria-container {
+      margin-bottom: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .categoria-header {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .categoria-header:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .categoria-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #d4af37;
+    }
+
+    .categoria-items {
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .categoria-items.collapsed {
+      display: none;
+    }
+
+    /* Itens com Fotos */
+    .item-presente {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      margin: 10px 0;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .item-imagem {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .item-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .item-presente.reservado {
+      opacity: 0.8;
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      cursor: not-allowed;
+    }
+
+    .item-presente.reservado::after {
+      content: "✓";
+      position: absolute;
+      right: 15px;
+      color: #d4af37;
+      font-size: 1.5rem;
+      text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+    }
+
+    .item-presente.reservado h3 {
+      text-decoration: line-through;
+    }
+
+    .detalhes-reserva {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #f8d7af;
+      font-size: 0.9rem;
+    }
+
+    .dica {
+      font-size: 0.9rem;
+      color: #f8d7af;
+      margin-bottom: 15px;
+      opacity: 0.8;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #f8d7af;
+      font-weight: 600;
+    }
+
+    .input-text {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .input-text::placeholder {
+      color: #ccc;
+    }
+
+    .input-text:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+    }
+
+    .item-imagem:empty {
+      background: rgba(255,255,255,0.1);
+      border: 2px dashed rgba(255,255,255,0.2);
+    }
+
+    #resumo-presente {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      color: #f8d7af;
+    }
+
+    @media (max-width: 480px) {
+      .titulo-principal {
+        font-size: 2rem;
+      }
+      .destaque-data {
+        font-size: 1.8rem;
+      }
+      .botao-acao {
+        font-size: 1rem;
+      }
+      .item-imagem {
+        width: 60px;
+        height: 60px;
+      }
+      #modalPresentes .modal-content {
+        max-height: 85vh;
+      }
+      .categoria-items {
+        max-height: 300px;
+      }
+    }
+
+    footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.7);
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  border-top: 1px solid rgba(255,255,255,0.2);
+  z-index: 1000;
+}
+
+footer a {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="titulo-principal">Chá de Casa Nova</h1>
+    
+    <p class="destaque-verso">
+      "Vem celebrar porque Ele nos amou primeiro"
+    </p>
+
+    <div class="texto-convite">
+      <p>
+        Convidamos você para abençoar nosso lar,<br>
+        um lugar que nasce para refletir o amor Daquele que nos uniu.<br>
+        Cristo não é apenas o fundamento desta casa,<br>
+        mas o coração de cada canto, cada detalhe,<br>
+        cada momento que compartilharemos!
+      </p>
+    </div>
+
+    <div class="destaque-data">
+      31 DE MAIO - 13H
+    </div>
+
+    <div class="acoes-cha">
+      <a href="#" class="botao-acao" id="btnLocalizacao">📍 Localização</a>
+      <a href="#" class="botao-acao" id="btnListaPresentes">🎁 Lista de Presentes</a>
+      <a href="#" class="botao-acao" id="btnConfirmarPresenca">✅ Confirmar Presença</a>
+    </div>
+  </div>
+
+  <!-- Modal Localização -->
+  <div class="modal" id="modalLocalizacao">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="fecharModal()"></button>
+      <h2>Local do Evento</h2>
+      
+      <div class="endereco-completo">
+        <h3>R. Juréia, 2 - Bosque de Jandira, Jandira - SP, 06620-360</h3>
+      </div>
+                
+      <a href="https://maps.app.goo.gl/KuxMQqMnCHBYm6d3A" 
+         target="_blank"
+         class="botao-acao">🗺️ Abrir no Google Maps</a>
+      
+      <button class="botao-acao" onclick="copiarEndereco()">
+        📋 Copiar Endereço Completo
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Lista de Presentes -->
+  <div class="modal" id="modalPresentes">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="fecharModal()"></button>
+      <h2>Escolha um Presente</h2>
+      <p class="dica">Clique nas categorias para expandir/recolher</p>
+      <div id="listaPresentes"></div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmação -->
+  <div class="modal" id="modalConfirmacao">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="fecharModal()"></button>
+      <h2>Confirmar Reserva</h2>
+      <p id="detalhesPresente"></p>
+
+      <div class="form-group">
+        <label for="nomeUsuario">Nome</label>
+        <input type="text" id="nomeUsuario" class="input-text" placeholder="Digite seu nome">
+      </div>
+      <div class="form-group">
+        <label for="sobrenomeUsuario">Sobrenome</label>
+        <input type="text" id="sobrenomeUsuario" class="input-text" placeholder="Digite seu sobrenome">
+      </div>
+
+      <button class="botao-acao" onclick="confirmarReserva()">Confirmar Escolha</button>
+    </div>
+  </div>
+
+  <!-- Modal Sucesso -->
+  <div class="modal" id="modalSucesso">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="voltarParaLista()"></button>
+      <h2>Reserva Confirmada! 🎉</h2>
+      <p>O presente foi reservado com sucesso!</p>
+    </div>
+  </div>
+
+  <!-- Modal PIX -->
+  <div class="modal" id="modalPix">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="fecharModal()"></button>
+      <h2>Presentear com PIX</h2>
+      
+      <div class="dados-pix">
+        <p>Valor mínimo: <strong>R$ 50,00</strong></p>
+        
+        <div class="qr-code">
+          <img src="qrcode-pix.png" alt="QR Code PIX">
+        </div>
+
+        <p>Chave PIX: <strong>11943141599</strong></p>
+        <p>Titular: <strong>Leandro Borges</strong></p>
+        <p>Banco: <strong>Nubank</strong></p>
+        
+        <button class="botao-acao" onclick="copiarChavePix()">
+          📋 Copiar Chave PIX
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Presença -->
+  <div class="modal" id="modalConfirmarPresenca">
+    <div class="modal-content">
+      <button class="botao-voltar" onclick="fecharModal()"></button>
+      <h2>Confirmar Presença</h2>
+      
+      <div id="resumo-presente">
+        <!-- Resumo do presente será inserido aqui -->
+      </div>
+
+      <div class="form-group">
+        <label for="nomeCompleto">Nome Completo</label>
+        <input type="text" id="nomeCompleto" class="input-text" placeholder="Digite seu nome completo">
+      </div>
+
+      <button class="botao-acao" onclick="enviarConfirmacaoWhatsApp()">
+        📲 Enviar Confirmação via WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Dados dos Presentes
+    const presentes = [
+      {
+        id: 1,
+        nome: "Presentear com PIX",
+        categoria: "Presente em Dinheiro",
+        preco: "R$ 50,00",
+        descricao: "Contribua com qualquer valor a partir de R$ 50,00",
+        imagem: "pix-icon.jpg"
+      },
+      {
+        id: 42,
+        nome: "Corte de Cabelo (Noivo)",
+        categoria: "Outros",
+        descricao: "",
+        imagem: "corte-cabelo-noivi.jpg"
+      },
+      {
+        id: 43,
+        nome: "PS5",
+        categoria: "Outros",
+        descricao: "",
+        imagem: "ps5.jpg"
+      },
+      {
+        id: 44,
+        nome: "Assinatura Kindle Unlimited",
+        categoria: "Outros",
+        descricao: "",
+        imagem: "kindle.jpg"
+      },
+      {
+        id: 2,
+        nome: "Mesa & Cadeiras",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "mesa-cadeiras.jpeg"
+      },
+      {
+        id: 3,
+        nome: "Geladeira",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "geladeira.jpeg"
+      },
+      {
+        id: 4,
+        nome: "Forno Elétrico",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "forno-eletrico.jpeg"
+      },
+      {
+        id: 5,
+        nome: "Cooktop 5 Bocas",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "cooktop.jpeg"
+      },
+      {
+        id: 6,
+        nome: "Air Fryer",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "air-fryer.jpeg"
+      },
+      {
+        id: 7,
+        nome: "Microondas",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "microondas.jpeg"
+      },
+      {
+        id: 8,
+        nome: "Churrasqueira Elétrica",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "churrasqueira-eletrica.jpeg"
+      },
+      {
+        id: 9,
+        nome: "Kit Churrasco",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "kit-churrasco.jpeg"
+      },
+      {
+        id: 10,
+        nome: "Sanduicheira",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "assadeira.jpeg"
+      },
+      {
+        id: 11,
+        nome: "Liquidificador",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "liquidificador.jpeg"
+      },
+      {
+        id: 12,
+        nome: "Purificador de Água",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "purificador-agua.jpeg"
+      },
+      {
+        id: 13,
+        nome: "Jogo de Copos",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "jogo-copos.jpeg"
+      },
+      {
+        id: 14,
+        nome: "Jogos de Pratos",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "jogo-pratos.jpeg"
+      },
+      {
+        id: 15,
+        nome: "Jogo de Talheres (Sem cabo)",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "jogo-talheres.jpeg"
+      },
+      {
+        id: 16,
+        nome: "Jogo de Facas",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "jogo-facas.jpeg"
+      },
+      {
+        id: 17,
+        nome: "Jogo Colheres Silicone",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "colheres-silicone.jpeg"
+      },
+      {
+        id: 18,
+        nome: "Cortador Multifuncional de Verdura e Legumes",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "processador.jpeg"
+      },
+      {
+        id: 19,
+        nome: "Tabua de Corte",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "tabua.jpeg"
+      },
+      {
+        id: 20,
+        nome: "Panela de Pressão",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "panela-pressao.jpeg"
+      },
+      {
+        id: 21,
+        nome: "Assadeiras",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "assadeiras.jpeg"
+      },
+      {
+        id: 22,
+        nome: "Boleira de Vidro",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "boleira-vidro.jpeg"
+      },
+      {
+        id: 23,
+        nome: "Potes de Vidro",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "potes-vidros.jpeg"
+      },
+      {
+        id: 24,
+        nome: "Cafeteira",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "cafeteira.jpeg"
+      },
+      {
+        id: 25,
+        nome: "Conjunto de Xícaras",
+        categoria: "Cozinha",
+        descricao: "",
+        imagem: "jogo-xicaras.jpeg"
+      },
+      {
+        id: 26,
+        nome: "Manta para Sofá",
+        categoria: "Sala de Estar",
+        descricao: "",
+        imagem: "manta-sofa.jpeg"
+      },
+      {
+        id: 27,
+        nome: "Cortinas",
+        categoria: "Sala de Estar",
+        descricao: "",
+        imagem: "cortinas.jpeg"
+      },
+      {
+        id: 45,
+        nome: "Sofá",
+        categoria: "Sala de Estar",
+        descricao: "",
+        imagem: "sofa.jpeg"
+      },
+      {
+        id: 28,
+        nome: "Puff",
+        categoria: "Sala de Estar",
+        descricao: "",
+        imagem: "puff.jpeg"
+      },
+      {
+        id: 29,
+        nome: "Conjunto de Toalhas de Banho",
+        categoria: "Banheiro",
+        descricao: "",
+        imagem: "toalha-banho.jpeg"
+      },
+      {
+        id: 30,
+        nome: "Conjunto de Toalhas de Rosto",
+        categoria: "Banheiro",
+        descricao: "",
+        imagem: "toalha-rosto.jpeg"
+      },
+      {
+        id: 31,
+        nome: "Lixeira",
+        categoria: "Banheiro",
+        descricao: "",
+        imagem: "lixeira.jpeg"
+      },
+      {
+        id: 46,
+        nome: "Cama",
+        categoria: "Quarto",
+        descricao: "",
+        imagem: "cama.jpeg"
+      },
+      {
+        id: 32,
+        nome: "Jogo de Cama (Lençois, Fronhas)",
+        categoria: "Quarto",
+        descricao: "",
+        imagem: "lencois.jpeg"
+      },
+      {
+        id: 33,
+        nome: "Travesseiros",
+        categoria: "Quarto",
+        descricao: "",
+        imagem: "travesseiros.jpeg"
+      },
+      {
+        id: 34,
+        nome: "Edredom",
+        categoria: "Quarto",
+        descricao: "",
+        imagem: "edredom.jpeg"
+      },
+      {
+        id: 35,
+        nome: "Persianas",
+        categoria: "Quarto",
+        descricao: "",
+        imagem: "persiana.jpeg"
+      },
+      {
+        id: 36,
+        nome: "Tábua de Passar Roupa",
+        categoria: "Lavanderia",
+        descricao: "",
+        imagem: "tabua-ferro.jpeg"
+      },
+      {
+        id: 37,
+        nome: "Ferro de Passar Roupa",
+        categoria: "Lavanderia",
+        descricao: "",
+        imagem: "ferro.jpeg"
+      },
+      {
+        id: 38,
+        nome: "Baldes / Bacias ",
+        categoria: "Lavanderia",
+        descricao: "",
+        imagem: "balde.jpeg"
+      },
+      {
+        id: 39,
+        nome: "Aspirador de Pó",
+        categoria: "Lavanderia",
+        descricao: "",
+        imagem: "aspirador.jpeg"
+      },
+      {
+        id: 40,
+        nome: "Varal Retrátil",
+        categoria: "Lavanderia",
+        descricao: "",
+        imagem: "varol.jpeg"
+      }
+    ];
+
+    // Variáveis globais
+    let reservas = [];
+    let presenteSelecionado = null;
+    let itemEscolhido = null;
+
+    // Funções de Modal
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('active');
+      if(id === 'modalPresentes') carregarListaPresentes();
+    }
+
+    function fecharModal() {
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+      });
+    }
+
+    function abrirModalPix() {
+      fecharModal();
+      abrirModal('modalPix');
+    }
+
+    // Funções de Cópia
+    function copiarEndereco() {
+      const endereco = `R. Juréia, 2 - Bosque de Jandira, Jandira - SP, 06620-360`;
+      navigator.clipboard.writeText(endereco)
+        .then(() => alert("Endereço copiado!"))
+        .catch(() => alert("Erro ao copiar"));
+    }
+
+    function copiarChavePix() {
+      navigator.clipboard.writeText("452.394.218-89")
+        .then(() => alert("Chave PIX copiada!"))
+        .catch(() => alert("Erro ao copiar"));
+    }
+
+    // Carregar lista de presentes
+    function carregarListaPresentes() {
+      const container = document.getElementById('listaPresentes');
+      container.innerHTML = '';
+
+      // Item PIX
+      const pixPresente = presentes.find(p => p.id === 1);
+      container.innerHTML += `
+        <div class="categoria-container">
+          <div class="categoria-header" onclick="abrirModalPix()">
+            <div class="categoria-title">🎁 ${pixPresente.categoria}</div>
+            <div>➔</div>
+          </div>
+        </div>
+      `;
+
+      // Demais categorias
+      const categorias = [...new Set(presentes.filter(p => p.id !== 1).map(p => p.categoria))];
+      
+      categorias.forEach(categoria => {
+        const itensCategoria = presentes.filter(p => p.categoria === categoria && p.id !== 1);
+        
+        const categoriaHTML = `
+          <div class="categoria-container">
+            <div class="categoria-header" onclick="toggleCategoria(this)">
+              <div class="categoria-title">${categoria}</div>
+              <div>▶</div>
+            </div>
+            <div class="categoria-items collapsed">
+              ${itensCategoria.map(p => `
+                <div class="item-presente ${reservas.some(r => r.id === p.id) ? 'reservado' : ''}" 
+                    onclick="${!reservas.some(r => r.id === p.id) ? `selecionarPresente(${p.id})` : ''}">
+                  ${p.imagem ? `<img src="imagens/${p.imagem}" class="item-imagem" alt="${p.nome}" onerror="this.style.display='none'">` : '<div class="item-imagem"></div>'}
+                  <div class="item-info">
+                    <h3>${p.nome}</h3>
+                    ${p.descricao ? `<p>${p.descricao}</p>` : ''}
+                    ${p.preco ? `<p><strong>${p.preco}</strong></p>` : ''}
+                    ${reservas.some(r => r.id === p.id) ? `
+                      <div class="detalhes-reserva">
+                        <small>Reservado por ${reservas.find(r => r.id === p.id).usuario}</small>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        container.innerHTML += categoriaHTML;
+      });
+    }
+
+    function toggleCategoria(header) {
+      const container = header.closest('.categoria-container');
+      const items = container.querySelector('.categoria-items');
+      const arrow = header.querySelector('div:last-child');
+      
+      items.classList.toggle('collapsed');
+      arrow.textContent = items.classList.contains('collapsed') ? '▶' : '▼';
+    }
+
+    // Selecionar presente
+    function selecionarPresente(id) {
+      presenteSelecionado = id;
+      itemEscolhido = presentes.find(p => p.id === id);
+      const presente = itemEscolhido;
+      document.getElementById('detalhesPresente').innerHTML = `
+        <strong>${presente.nome}</strong><br>
+        ${presente.descricao}<br>
+        ${presente.preco ? `Valor: ${presente.preco}` : ''}  
+      `;
+      abrirModal('modalConfirmacao');
+    }
+
+    // Confirmar reserva
+    function confirmarReserva() {
+      if(!presenteSelecionado) return;
+      
+      const nomeUsuario = document.getElementById('nomeUsuario').value.trim();
+      const sobrenomeUsuario = document.getElementById('sobrenomeUsuario').value.trim();
+      
+      if (!nomeUsuario || !sobrenomeUsuario) {
+        alert("Por favor, preencha seu nome e sobrenome.");
+        return;
+      }
+
+      const usuario = `${nomeUsuario} ${sobrenomeUsuario}`;
+      const presente = presentes.find(p => p.id === presenteSelecionado);
+      
+      const payload = {
+        id: presente.id,
+        nome: presente.nome,
+        preco: presente.preco || 'Não especificado',
+        usuario: usuario
+      };
+
+      fetch('/reservas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Erro na reserva');
+        return data;
+      })
+      .then(data => {
+        reservas.push(payload);
+        const itemReservado = document.querySelector(`.item-presente[onclick*="${presenteSelecionado}"]`);
+        
+        if(itemReservado) {
+          itemReservado.classList.add('reservado');
+          itemReservado.querySelector('.item-info').innerHTML += `
+            <div class="detalhes-reserva">
+              <small>Reservado por ${payload.usuario}</small>
+            </div>
+          `;
+          itemReservado.onclick = null;
+        }
+        
+        fecharModal();
+        abrirModal('modalSucesso');
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+    }
+
+    // Função corrigida para voltar à lista
+    function voltarParaLista() {
+      fecharModal();
+      fetch('/reservas')
+        .then(response => response.json())
+        .then(data => {
+          reservas = data;
+          carregarListaPresentes();
+          abrirModal('modalPresentes');
+        });
+    }
+
+    // Confirmar presença
+    function abrirConfirmacaoPresenca() {
+      const resumo = document.getElementById('resumo-presente');
+      let html = '<p>';
+      
+      if(itemEscolhido) {
+        if(itemEscolhido.id === 1) {
+          html += `Presente escolhido: PIX (${itemEscolhido.preco})`;
+        } else {
+          html += `Presente escolhido: ${itemEscolhido.nome}`;
+        }
+      } else {
+        html += 'Nenhum presente selecionado';
+      }
+      html += '</p>';
+      
+      resumo.innerHTML = html;
+      abrirModal('modalConfirmarPresenca');
+    }
+
+    function enviarConfirmacaoWhatsApp() {
+      const nome = document.getElementById('nomeCompleto').value.trim();
+      if(!nome) {
+        alert("Por favor, digite seu nome completo");
+        return;
+      }
+
+      let mensagem = `Eu *${nome}* confirmo presença no Chá de Casa Nova!\n\n`;
+      
+      if(itemEscolhido) {
+        mensagem += itemEscolhido.id === 1 
+          ? `Presentearei com PIX no valor de *${itemEscolhido.preco}*` 
+          : `Item escolhido: *${itemEscolhido.nome}*`;
+      } else {
+        mensagem += "Não selecionei nenhum presente ainda";
+      }
+
+      // Substituir pelo seu número
+      const numero = '5511964474801'; 
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+
+    // Event Listeners
+    document.getElementById('btnLocalizacao').addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirModal('modalLocalizacao');
+    });
+
+    document.getElementById('btnListaPresentes').addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirModal('modalPresentes');
+    });
+
+    document.getElementById('btnConfirmarPresenca').addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirConfirmacaoPresenca();
+    });
+
+    // Inicialização
+    function inicializar() {
+      fetch('/reservas')
+      .then(response => response.json())
+      .then(data => {
+        reservas = data;
+        carregarListaPresentes();
+      })
+      .catch(error => console.error("Erro ao carregar reservas:", error));
+    }
+
+    inicializar();
+  </script>
+
+<!-- Rodapé -->
+<footer style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.7);
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  border-top: 1px solid rgba(255,255,255,0.2);
+">
+  <p>Site desenvolvido por Leandro Borges • 
+    <a href="tel:11943151599" style="
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 600;
+    ">11 94315-1599</a>
+  </p>
+</footer>
+
+</body>
+</html>
